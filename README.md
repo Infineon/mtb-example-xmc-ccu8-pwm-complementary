@@ -1,12 +1,12 @@
 # XMC MCU: CCU8 PWM Complementary
 
-This code example demonstrates generating two complementary pulse width modulated (PWM) waves using the Capture and Compare Unit(CCU8 module) available in XMC&trade; MCU.
+This code example demonstrates generating two complementary pulse width modulated (PWM) waves using the Capture and Compare Unit 8 (CCU8 module) available in XMC&trade; MCU.
 
-One CCU8 slice is configured to generate complementary PWM signals in the project. This example also shows how dead time insertion is also done between the generated PWM signals.
+One CCU8 slice is configured to generate complementary PWM signals in the project. This example also shows how dead-time insertion is done between generated PWM signals.
 
 ## Requirements
 
-- [ModusToolbox® software](https://www.cypress.com/products/modustoolbox-software-environment) v2.3
+- [ModusToolbox&trade; software](https://www.cypress.com/products/modustoolbox-software-environment) v2.3
 - [SEGGER J-Link software](https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack)
 - Programming Language: C
 - Associated Parts: All [XMC™ MCU](https://www.infineon.com/cms/en/product/microcontroller/32-bit-industrial-microcontroller-based-on-arm-cortex-m/) parts
@@ -102,19 +102,30 @@ Various CLI tools include a `-h` option that prints help information to the term
 
    2. In the **Quick Panel**, scroll down, and click **\<Application Name> Program (JLink)**.
 
-3. Observe CCU8 slice direct and inverted outputs on an oscilloscope. See the dead time inserted between transitions (Figure 1).
+3. Observe the CCU8 slice direct and inverted outputs on an oscilloscope. See the dead-time inserted between transitions (Figure 1).
 
-   Output pins:  
-         XMC47 Relax kit P0.3 (DIR),  P0.0 (INV)  
-         XMC14 Boot Kit  P0.0 (DIR),  P0.1 (INV)
+   Output pins:
+      XMC47 Relax kit P0.3 (DIR),  P0.0 (INV)
+      XMC14 Boot Kit  P0.0 (DIR),  P0.1 (INV)
 
-   **Figure 1: Complementary PWM singals generarated with dead-time**
+   **Figure 1. Complementary PWM signals generated with dead-time**
 
    ![](images/pwm_comp_waveform.jpg)
+
 
 ## Debugging
 
 You can debug the example to step through the code. In the IDE, use the **\<Application Name> Debug (JLink)** configuration in the **Quick Panel**. For more details, see the "Program and Debug" section in the [Eclipse IDE for ModusToolbox User Guide](https://www.cypress.com/MTBEclipseIDEUserGuide).
+
+## Design and Implementation
+
+This example shows how the CCU8 peripheral of the XMC MCU works. The code does the following:
+
+1. Defines two GPIOs for complementary PWM output. The GPIO's ports and pins are configured by the preprocessor depending on the selected MCU.
+
+2. Configures the CCU8 slice as a timer in 'Edge Aligned' mode. To ensure that both PWM outputs are not HIGH at the same time, dead-time is configured and saved in the `dt_config` structure. Afterwards, the timer is initialized with the `PWM_PERIOD` period value and  `PWM_COMPARE`compare value using `XMC_CCU8_SLICE_SetTimerCompareMatch()` and compare value()` functions.
+
+3. Starts the timer. Both the both pins will be complementary set HIGH and LOW depending on the dead-time, and period and compare values defined.
 
 ## Related Resources
 
@@ -147,13 +158,14 @@ Document Title: *CE232581* - *XMC MCU: CCU8 PWM Complementary*
 | Version | Description of Change |
 | ------- | --------------------- |
 | 1.0.0   | New code example      |
+| 1.0.1   | Updated README        |
 ------
 
 All other trademarks or registered trademarks referenced herein are the property of their respective owners.
 
 ![banner](images/ifx_logo_rgb.jpg)
 
-© 2021 Infineon Technologies AG
+© 2020-2021 Infineon Technologies AG
 
 All Rights Reserved.
 
